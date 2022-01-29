@@ -63,8 +63,7 @@ public class GenerateShadow : MonoBehaviour
     private List<Vector3> RemoveColinear(List<Vector3> list) {
         var newList = list.ConvertAll(v3 => new Vector3(v3[0],v3[1],v3[2]));
         for(int i = newList.Count - 1; i >= 0; i--) {
-            Debug.Log("--------");
-            Debug.Log(newList.Count);
+
 
             var p1 = newList[(i + 1 + newList.Count) % newList.Count];
             var p2 = newList[(i + newList.Count) % newList.Count];
@@ -72,12 +71,10 @@ public class GenerateShadow : MonoBehaviour
 
             var coValue = (p2[0] - p1[0])*(p3[2] - p2[2]) - (p2[2] - p1[2])*(p3[0] - p2[0]);
             var isCo = Math.Abs(coValue - 0) < 0.0001;
-            Debug.Log(isCo);
             if (isCo) {
                 newList.RemoveAt(i);
             }
         }
-        Debug.Log("--------");
         return newList;
     }
 
@@ -104,7 +101,7 @@ public class GenerateShadow : MonoBehaviour
         }
         convexHull = ConvexHull.compute(hitPoints);
         
-        LogList(convexHull);
+        //LogList(convexHull);
 
         if (!haveBase) {
 
@@ -127,15 +124,13 @@ public class GenerateShadow : MonoBehaviour
             pointsToFit.Reverse();
 
             for (int i = 0; i < pointsToFit.Count; i++) {
-               Debug.Log(i);
                var indexToReplace = convexHull.FindIndex(a => a == pointsToReplace[i]);
                 convexHull[indexToReplace] = pointsToFit[i];
             }
         }
-        var yOffset = 0.05f;
-        convexHull = convexHull.ConvertAll(v => new Vector3(v[0], v[1] + yOffset, v[2]));
-
-        LogList(convexHull);
+        var yOffset = 0.07f;
+        var convexHullPlus = convexHull.ConvertAll(v => new Vector3(v[0], v[1] + yOffset, v[2]));
+        convexHull.AddRange(convexHullPlus);
 
 
         shadowObj = new GameObject("shadow");
@@ -148,14 +143,20 @@ public class GenerateShadow : MonoBehaviour
 
         
 
-        if (convexHull.Count == 4) {
-            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 2,0,3};
+        if (convexHull.Count == 8) {
+            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 2,0,3, 6,5,4, 6,4,7};
         } else {
-            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 4,3,2, 4,0,5, 0,4,2};
+            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 4,3,2, 4,0,5, 0,4,2, 8,7,6, 10,9,8, 10,6,11, 6,10,8};
         }
 
         shadowObj.AddComponent<MeshCollider>();
         shadowObj.GetComponent<MeshCollider>().convex = true;
+        
+        //Debug.Log("---------");
+
+        //LogList(shadowObj.GetComponent<MeshFilter>().mesh.vertices.ToList());
+
+
 
 
     }

@@ -22,11 +22,18 @@ public class CaremaSwitching : MonoBehaviour
     private Quaternion endRo;
 
     private bool allowToPress = true;
+    private bool callBackDone = true;
 
 
     Vector3 getPlayerCaremaPoint() {
         Vector3 playerPoint = Player.transform.position + offset;
         return new Vector3(playerPoint[0], playerPoint[1], playerPoint[2]);
+    }
+
+    public void tryToggleCam() {
+        if (allowToPress) {
+                toogleCarema();
+        } 
     }
 
     void initTransform(Vector3 startPoint, Vector3 endPoint, Quaternion startRotation, Quaternion endRotation) {
@@ -46,6 +53,7 @@ public class CaremaSwitching : MonoBehaviour
             initTransform(center, getPlayerCaremaPoint(), centerRo, playerRo);
         }
         allowToPress = false;
+        callBackDone = false;
     }
 
     // Start is called before the first frame update
@@ -58,7 +66,7 @@ public class CaremaSwitching : MonoBehaviour
         transform.position = Player.transform.position + offset;
         playerRo = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
         centerRo = new Quaternion(0.5f, 0.5f, -0.5f, 0.5f);
-        Debug.Log(centerRo);
+        // Debug.Log(centerRo);
     }
 
     // Update is called once per frame
@@ -68,19 +76,16 @@ public class CaremaSwitching : MonoBehaviour
             transform.position = Player.transform.position + offset;
         }
 
-        if (Input.GetKeyDown(KeyCode.B)) {
-            if (allowToPress) {
-                toogleCarema();
-            } 
-        }
         
         if (timeElapsed < lerpDuration)
         {
             transform.position = Vector3.Lerp(startValue, endValue, timeElapsed / lerpDuration);
             transform.rotation = Quaternion.Lerp(startRo, endRo, timeElapsed / lerpDuration);
             timeElapsed += Time.deltaTime;
-        } else {
+        } else if(!callBackDone) {
             allowToPress = true;
+            callBackDone = true;
+           // GameObject.FindGameObjectsWithTag("GameController")[0].caremaCallBack();
         }
     }
 }
