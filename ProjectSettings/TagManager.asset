@@ -6,7 +6,8 @@ TagManager:
   tags:
   - Light
   - Controller
-  - Carema
+  - Push
+  - Shadow
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - Land
   - NormalObject
   - ShadowObject
-  - 
+  - ShadowGenerated
   - 
   - 
   - 

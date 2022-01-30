@@ -21,7 +21,6 @@ public class CaremaSwitching : MonoBehaviour
     private Quaternion startRo;
     private Quaternion endRo;
 
-    private bool allowToPress = true;
     private bool callBackDone = true;
 
 
@@ -30,11 +29,7 @@ public class CaremaSwitching : MonoBehaviour
         return new Vector3(playerPoint[0], playerPoint[1], playerPoint[2]);
     }
 
-    public void tryToggleCam() {
-        if (allowToPress) {
-                toogleCarema();
-        } 
-    }
+
 
     void initTransform(Vector3 startPoint, Vector3 endPoint, Quaternion startRotation, Quaternion endRotation) {
         timeElapsed = 0;
@@ -44,7 +39,7 @@ public class CaremaSwitching : MonoBehaviour
         endRo = endRotation;
     }
 
-    void toogleCarema() {
+    public void ToogleCarema() {
         if (followPlayer) {
             followPlayer = false;
             initTransform(getPlayerCaremaPoint(), center, playerRo, centerRo);
@@ -52,7 +47,6 @@ public class CaremaSwitching : MonoBehaviour
             followPlayer = true;
             initTransform(center, getPlayerCaremaPoint(), centerRo, playerRo);
         }
-        allowToPress = false;
         callBackDone = false;
     }
 
@@ -83,9 +77,8 @@ public class CaremaSwitching : MonoBehaviour
             transform.rotation = Quaternion.Lerp(startRo, endRo, timeElapsed / lerpDuration);
             timeElapsed += Time.deltaTime;
         } else if(!callBackDone) {
-            allowToPress = true;
             callBackDone = true;
-           // GameObject.FindGameObjectsWithTag("GameController")[0].caremaCallBack();
+            GameObject.FindGameObjectsWithTag("GameController")[0].GetComponent<Controller>().caremaCallBack();
         }
     }
 }

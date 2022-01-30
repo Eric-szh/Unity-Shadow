@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq; 
 using System;
+using UnityEditor;
 
 public class GenerateShadow : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class GenerateShadow : MonoBehaviour
     private Vector3 dir;
     private Mesh selfMesh;
     GameObject shadowObj;
+    PhysicMaterial shadowMaterial;
     Vector3[] vertices;
     Vector3[] noDupeVert;
     Vector3 scale;
@@ -80,13 +82,14 @@ public class GenerateShadow : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-       GenShadow(false);
+    {   
+        shadowMaterial = Resources.Load<PhysicMaterial>("LowFriction");
+        Debug.Log(shadowMaterial);
     }
 
     List<Vector3> convexHull;
 
-    void GenShadow(bool haveBase) {
+    public void GenShadow(bool haveBase) {
         List<Vector3> hitPoints = new List<Vector3>();
         foreach (Vector3 vect in topPoints) {
             RaycastHit hit;
@@ -128,7 +131,7 @@ public class GenerateShadow : MonoBehaviour
                 convexHull[indexToReplace] = pointsToFit[i];
             }
         }
-        var yOffset = 0.07f;
+        var yOffset = 0.3f;
         var convexHullPlus = convexHull.ConvertAll(v => new Vector3(v[0], v[1] + yOffset, v[2]));
         convexHull.AddRange(convexHullPlus);
 
@@ -144,13 +147,20 @@ public class GenerateShadow : MonoBehaviour
         
 
         if (convexHull.Count == 8) {
-            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 2,0,3, 6,5,4, 6,4,7};
+            shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 2,0,3, 6,5,4, 6,4,7, 5,4,0, 5,0,1, 6,5,1, 6,1,2, 7,6,2, 7,2,3, 4,7,3, 4,3,0};
         } else {
             shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 4,3,2, 4,0,5, 0,4,2, 8,7,6, 10,9,8, 10,6,11, 6,10,8};
         }
 
+        shadowObj.GetComponent<MeshFilter>().mesh.RecalculateNormals();
         shadowObj.AddComponent<MeshCollider>();
         shadowObj.GetComponent<MeshCollider>().convex = true;
+        shadowObj.GetComponent<MeshCollider>().material = shadowMaterial;
+        shadowObj.layer = 9;
+
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
         
         //Debug.Log("---------");
 
@@ -159,6 +169,17 @@ public class GenerateShadow : MonoBehaviour
 
 
 
+    }
+
+    public void RemoveShadow() {
+         foreach (Transform child in transform)
+         {
+            child.parent = null; 
+            Destroy(child.gameObject);
+         }
+         GetComponent<MeshRenderer>().enabled = true;
+         GetComponent<Collider>().enabled = true;
+         GetComponent<Rigidbody>().isKinematic = true;
     }
 
     // Update is called once per frame
@@ -174,9 +195,9 @@ public class GenerateShadow : MonoBehaviour
             
 
 
-        for(var i = 1; i < convexHull.Count; i++){
-           Debug.DrawLine(convexHull[i-1], convexHull[i], Color.red);
-        }
+        // for(var i = 1; i < convexHull.Count; i++){
+        //    Debug.DrawLine(convexHull[i-1], convexHull[i], Color.red);
+        // }
     } 
 
     
