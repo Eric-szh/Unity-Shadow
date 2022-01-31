@@ -8,10 +8,11 @@ public class CaremaSwitching : MonoBehaviour
     public Vector3 offset;
     public GameObject Base;
     public float lerpDuration;
+    public bool postive = false;
     
     private Vector3 center; 
     private bool followPlayer = true;
-    private float centerCaremaOffset = 20f;
+    public float centerCaremaOffset = 20f;
     private float timeElapsed = 20f;
     private Vector3 startValue;
     private Vector3 endValue;
@@ -55,11 +56,17 @@ public class CaremaSwitching : MonoBehaviour
     {
         
         offset = transform.position - Player.transform.position;
-        var cenPos = Base.transform.position;
+        var cenPos = Base.GetComponent<MeshRenderer>().bounds.center;
         center = new Vector3(cenPos[0], cenPos[1] + centerCaremaOffset, cenPos[2]);
         transform.position = Player.transform.position + offset;
         playerRo = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
-        centerRo = new Quaternion(0.5f, 0.5f, -0.5f, 0.5f);
+        if (!postive) {
+            centerRo = new Quaternion(0.5f, 0.5f, -0.5f, 0.5f);
+        } else {
+            centerRo = new Quaternion(0.5f, -0.5f, 0.5f, 0.5f);
+        }
+        
+        
         // Debug.Log(centerRo);
     }
 

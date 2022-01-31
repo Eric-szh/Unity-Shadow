@@ -10,6 +10,7 @@ public class Controller : MonoBehaviour
 
     bool shadowState = false;
     bool allowToPressB = true;
+    bool needRespwan = false;
 
     private List<GameObject> FindGameObjectsWithLayer (int layer) {
         var goArray = FindObjectsOfType<GameObject>();
@@ -30,20 +31,70 @@ public class Controller : MonoBehaviour
     public void caremaCallBack() {
         allowToPressB = true;
         List<GameObject> objects = FindGameObjectsWithLayer(7);
+        List<GameObject> objectShadow = FindGameObjectsWithLayer(8);
+        List<GameObject> airObj = FindGameObjectsWithLayer(10);
+        List<GameObject> glassObj = FindGameObjectsWithLayer(12);
+        
         if(shadowState) {
             player.GetComponent<PlayerMoving>().SwitchShadow();
         } else {
             player.GetComponent<PlayerMoving>().SwitchNonShadow();
         }
 
-        foreach (GameObject obj in objects) {
+        if (objects != null) {
+            foreach (GameObject obj in objects) {
             if(shadowState) {
-                obj.GetComponent<GenerateShadow>().GenShadow(false);
+                obj.GetComponent<GenerateShadow>().GenShadow(false, false);
             } else {
                 obj.GetComponent<GenerateShadow>().RemoveShadow();
             }
             
+            }   
         }
+        
+        if(objectShadow != null) {
+            foreach (GameObject obj in objectShadow) {
+                if(shadowState) {
+                    obj.GetComponent<GenerateShadow>().GenShadow(true, false);
+                } else {
+                    obj.GetComponent<GenerateShadow>().RemoveShadow();
+            }
+
+            }
+        }
+
+        if(airObj != null) {
+            foreach (GameObject obj in airObj) {
+                if(shadowState) {
+                    obj.GetComponent<GenerateShadow>().GenShadow(false, true);
+                } else {
+                    obj.GetComponent<GenerateShadow>().RemoveShadow();
+            }
+
+            }
+        }
+
+        if(glassObj != null) {
+            foreach (GameObject obj in glassObj) {
+                if(shadowState) {
+                    obj.GetComponent<MeshRenderer>().enabled = false;
+                    obj.GetComponent<Collider>().enabled = false;
+                } else {
+                    obj.GetComponent<MeshRenderer>().enabled = true;
+                    obj.GetComponent<Collider>().enabled = true;
+            }
+
+            }
+        }
+
+        if (needRespwan) {
+            var spawn = GameObject.FindWithTag("Respawn");
+            player.transform.position = spawn.GetComponent<MeshRenderer>().bounds.center;
+            needRespwan = false;
+        }
+        
+
+
         player.GetComponent<PlayerMoving>().UnlockMovement();
     }
 
@@ -62,6 +113,15 @@ public class Controller : MonoBehaviour
             shadowState = !shadowState;
             allowToPressB = false;
             carema.GetComponent<CaremaSwitching>().ToogleCarema();
+        }
+        if (Input.GetKeyDown(KeyCode.R)) {
+            needRespwan = true;
+            if (shadowState) {
+                carema.GetComponent<CaremaSwitching>().ToogleCarema();
+                shadowState = !shadowState;
+            }
+            var spawn = GameObject.FindWithTag("Respawn");
+            player.transform.position = spawn.transform.position;
         }
     }
 }

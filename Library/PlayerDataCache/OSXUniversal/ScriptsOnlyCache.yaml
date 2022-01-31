@@ -4,21 +4,26 @@ ScriptsOnlyBuild:
     - CaremaSwitching
     - Controller
     - GenerateShadow
-    - MyUtility
     - PlayerMoving
     - TriangleFollowing
-    - WinGoal
-    - WindBlow
     Unity.PlasticSCM.Editor.dll:
     - Unity.PlasticSCM.Editor.PlasticWindow
+    Unity.ProBuilder.dll:
+    - UnityEngine.ProBuilder.PolyShape
+    - UnityEngine.ProBuilder.ProBuilderMesh
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.TextMeshPro.dll:
+    - TMPro.TMP_FontAsset
+    - TMPro.TMP_Settings
+    - TMPro.TMP_SpriteAsset
+    - TMPro.TMP_StyleSheet
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     - UnityEditor.TestTools.TestRunner.TestRun.TestJobDataHolder
   sceneClasses:
-    Assets/Scenes/SampleScene.unity:
+    Assets/Scenes/T_shape.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -37,6 +42,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
     - Class: 54
       Script: {instanceID: 0}
     - Class: 64
@@ -52,22 +59,26 @@ ScriptsOnlyBuild:
     - Class: 108
       Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 1858}
+      Script: {instanceID: 1844}
     - Class: 114
-      Script: {instanceID: 2074}
+      Script: {instanceID: 1886}
     - Class: 114
-      Script: {instanceID: 3092}
+      Script: {instanceID: 2184}
     - Class: 114
-      Script: {instanceID: 3896}
+      Script: {instanceID: 3118}
     - Class: 114
-      Script: {instanceID: 3966}
+      Script: {instanceID: 3992}
     - Class: 114
-      Script: {instanceID: 4494}
+      Script: {instanceID: 4404}
     - Class: 114
-      Script: {instanceID: 4564}
+      Script: {instanceID: 4530}
     - Class: 114
-      Script: {instanceID: 4992}
+      Script: {instanceID: 4592}
+    - Class: 114
+      Script: {instanceID: 4724}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 134
       Script: {instanceID: 0}
@@ -78,6 +89,12 @@ ScriptsOnlyBuild:
     - Class: 850595691
       Script: {instanceID: 0}
   scriptHashData:
+  - hash:
+      serializedVersion: 2
+      Hash: ae83e830e7a90c0aff918c4c2e520825
+    assemblyName: UnityEngine.UI.dll
+    namespaceName: UnityEngine.UI
+    className: GraphicRaycaster
   - hash:
       serializedVersion: 2
       Hash: 5ab533713adae59372fb3e10a585c186
@@ -254,12 +271,6 @@ ScriptsOnlyBuild:
     className: TestRunCallbackListener
   - hash:
       serializedVersion: 2
-      Hash: ae83e830e7a90c0aff918c4c2e520825
-    assemblyName: UnityEngine.UI.dll
-    namespaceName: UnityEngine.UI
-    className: GraphicRaycaster
-  - hash:
-      serializedVersion: 2
       Hash: f40fedccd4adbc76605bea6d67537e4b
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -314,7 +325,7 @@ ScriptsOnlyBuild:
     className: BezierShape
   - hash:
       serializedVersion: 2
-      Hash: 8e068bc7de73ef76385287ebf85a0fe6
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GenerateShadow
@@ -464,7 +475,7 @@ ScriptsOnlyBuild:
     className: PolyShape
   - hash:
       serializedVersion: 2
-      Hash: e9c8a3ad16d90878b3f05e1139234b40
+      Hash: 591dd02361f0c46b254676f9cf2df760
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TriangleFollowing
@@ -536,6 +547,12 @@ ScriptsOnlyBuild:
     className: WinGoal
   - hash:
       serializedVersion: 2
+      Hash: efa9fa51f1d382aad43841dc80e2b946
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CaremaSwitching
+  - hash:
+      serializedVersion: 2
       Hash: 9d7e8c27b347ca1426173ecdc6495a8b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
@@ -548,6 +565,18 @@ ScriptsOnlyBuild:
     className: TMP_SubMeshUI
   - hash:
       serializedVersion: 2
+      Hash: 87d475f033be3ae0185f6815b1cf72d8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PauseMenuController
+  - hash:
+      serializedVersion: 2
+      Hash: bc561bf05362241575ca22187f8de10a
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: MenuController
+  - hash:
+      serializedVersion: 2
       Hash: fd68d84f33fad85aac38f2739c0ee270
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -558,12 +587,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TMP_ScrollbarEventHandler
-  - hash:
-      serializedVersion: 2
-      Hash: efa9fa51f1d382aad43841dc80e2b946
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: CaremaSwitching
   - hash:
       serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
@@ -596,5 +619,5 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   platform: 2
   scenePathNames:
-  - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/eric/Desktop/GameMAc.app
+  - Assets/Scenes/T_shape.unity
+  playerPath: C:/Users/eric/Downloads/Mac.app

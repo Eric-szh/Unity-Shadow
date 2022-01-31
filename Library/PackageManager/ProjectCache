@@ -5,7 +5,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637790869158202423
+      ticks: 637790869140000000
     m_Hash: 1614426527
   m_LockFileStatus:
     m_FilePath: D:/EricUnity/My/Packages/packages-lock.json
@@ -13,7 +13,7 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637790869158202423
+      ticks: 637790869140000000
     m_Hash: 1105924910
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
@@ -91,6 +91,14 @@ m_PackageAssets:
         - 2.1.0-preview.5
         - 2.1.0-preview.6
         compatible:
+        - 1.13.5
+        - 1.14.1
+        - 1.14.4
+        - 1.14.7
+        - 1.14.9
+        - 1.14.12
+        - 1.15.1
+        - 1.15.4
         - 1.15.7
         - 1.15.9
         - 1.15.12
@@ -104,7 +112,7 @@ m_PackageAssets:
         - 2.1.0-preview.3
         - 2.1.0-preview.5
         - 2.1.0-preview.6
-        verified: 1.15.12
+        verified: 1.13.5
       dependencies:
       - name: com.unity.nuget.newtonsoft-json
         version: 2.0.0
@@ -3064,4 +3072,4 @@ m_PackageAssets:
   m_LocalPackages:
     m_LocalFileStatus: []
 m_ProjectPath: D:/EricUnity/My/Packages
-m_EditorVersion: 2020.3.26f1 (7298b473bc1a)
+m_EditorVersion: 2020.3.21f1 (a38c86f6690f)

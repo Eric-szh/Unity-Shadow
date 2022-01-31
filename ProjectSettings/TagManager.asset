@@ -19,9 +19,9 @@ TagManager:
   - NormalObject
   - ShadowObject
   - ShadowGenerated
+  - AirNormalObject
   - 
-  - 
-  - 
+  - GlassObject
   - 
   - 
   - 

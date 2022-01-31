@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class WinGoal : MonoBehaviour
 {
     bool win = false;
+    public string _sceneName;
 
     // Start is called before the first frame update
     void Start()
@@ -20,8 +22,11 @@ public class WinGoal : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!win) {
-            Debug.Log("you win");
+        Debug.Log("win");
+        if (!win ) {
+            
+            SceneManager.LoadScene(_sceneName);
+
             win = true;
         }
         

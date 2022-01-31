@@ -67,6 +67,10 @@ public class PlayerMoving : MonoBehaviour
                 if (Input.GetKey(KeyCode.S)) {
                     rb.AddForce(-Vector3.forward * forceCof);
                 }
+                // if (Input.GetKey(KeyCode.R)) {
+                //     var spawn = GameObject.FindWithTag("Respawn");
+                //     transform.position = spawn.transform.position;
+                // }
 
                 rb.velocity = Vector3.ClampMagnitude(GetComponent<Rigidbody>().velocity, maxSpeed);
             } else {

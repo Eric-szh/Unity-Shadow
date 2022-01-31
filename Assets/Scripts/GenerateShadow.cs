@@ -7,9 +7,11 @@ using UnityEditor;
 
 public class GenerateShadow : MonoBehaviour
 {
-    public GameObject light;
+    private GameObject light;
     private Vector3 dir;
     private Mesh selfMesh;
+    Material shadowRenderMaterial;
+
     GameObject shadowObj;
     PhysicMaterial shadowMaterial;
     Vector3[] vertices;
@@ -19,6 +21,7 @@ public class GenerateShadow : MonoBehaviour
     List<Vector3> bottomPoints;    
 
     private void Awake() {
+        light = GameObject.FindWithTag("Light");
         dir = light.GetComponent<Transform>().forward;
         selfMesh = GetComponent<MeshFilter>().mesh;
         vertices = selfMesh.vertices;
@@ -26,7 +29,7 @@ public class GenerateShadow : MonoBehaviour
         scale = transform.localScale;
         topPoints = new List<Vector3>();
         bottomPoints = new List<Vector3>();
-        SeperatePoints();
+        
         // LogList(topPoints);
         // Debug.Log("----------");
         // LogList(bottomPoints);
@@ -72,6 +75,7 @@ public class GenerateShadow : MonoBehaviour
             var p3 = newList[(i - 1 + newList.Count) % newList.Count];
 
             var coValue = (p2[0] - p1[0])*(p3[2] - p2[2]) - (p2[2] - p1[2])*(p3[0] - p2[0]);
+            Debug.Log(coValue);
             var isCo = Math.Abs(coValue - 0) < 0.0001;
             if (isCo) {
                 newList.RemoveAt(i);
@@ -84,12 +88,22 @@ public class GenerateShadow : MonoBehaviour
     void Start()
     {   
         shadowMaterial = Resources.Load<PhysicMaterial>("LowFriction");
-        Debug.Log(shadowMaterial);
+        shadowRenderMaterial = Resources.Load<Material>("Shadow");
     }
 
     List<Vector3> convexHull;
 
-    public void GenShadow(bool haveBase) {
+    
+
+    public void GenShadow(bool haveBase, bool onAir) {
+        
+        if (!onAir) {
+            SeperatePoints();
+        } else {
+            Debug.Log("AIR");
+            topPoints = noDupeVert.ToList();
+        }
+
         List<Vector3> hitPoints = new List<Vector3>();
         foreach (Vector3 vect in topPoints) {
             RaycastHit hit;
@@ -106,7 +120,9 @@ public class GenerateShadow : MonoBehaviour
         
         //LogList(convexHull);
 
-        if (!haveBase) {
+        convexHull = RemoveColinear(convexHull);
+
+        if (!haveBase && !onAir) {
 
             var gBottomPoints = new List<Vector3>();
             foreach (Vector3 vert in bottomPoints){
@@ -114,7 +130,7 @@ public class GenerateShadow : MonoBehaviour
             }
             gBottomPoints = ConvexHull.compute(gBottomPoints);
 
-            convexHull = RemoveColinear(convexHull);
+            
             List<Vector3> pointsToFit =  gBottomPoints.Except(convexHull).ToList();
             List<Vector3> pointsToReplace = new List<Vector3>();
 
@@ -130,7 +146,10 @@ public class GenerateShadow : MonoBehaviour
                var indexToReplace = convexHull.FindIndex(a => a == pointsToReplace[i]);
                 convexHull[indexToReplace] = pointsToFit[i];
             }
+            
         }
+        // Debug.Log(convexHull.Count);
+        // LogList(convexHull);
         var yOffset = 0.3f;
         var convexHullPlus = convexHull.ConvertAll(v => new Vector3(v[0], v[1] + yOffset, v[2]));
         convexHull.AddRange(convexHullPlus);
@@ -145,6 +164,7 @@ public class GenerateShadow : MonoBehaviour
         shadowObj.GetComponent<MeshFilter>().mesh.vertices = convexHull.ToArray();
 
         
+        // Debug.Log(convexHull.Count);
 
         if (convexHull.Count == 8) {
             shadowObj.GetComponent<MeshFilter>().mesh.triangles = new int[]{2,1,0, 2,0,3, 6,5,4, 6,4,7, 5,4,0, 5,0,1, 6,5,1, 6,1,2, 7,6,2, 7,2,3, 4,7,3, 4,3,0};
@@ -156,6 +176,8 @@ public class GenerateShadow : MonoBehaviour
         shadowObj.AddComponent<MeshCollider>();
         shadowObj.GetComponent<MeshCollider>().convex = true;
         shadowObj.GetComponent<MeshCollider>().material = shadowMaterial;
+        shadowObj.GetComponent<MeshRenderer>().material = shadowRenderMaterial;
+        shadowObj.GetComponent<MeshRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         shadowObj.layer = 9;
 
         GetComponent<MeshRenderer>().enabled = false;

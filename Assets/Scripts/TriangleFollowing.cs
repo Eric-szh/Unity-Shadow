@@ -8,6 +8,7 @@ public class TriangleFollowing : MonoBehaviour
     public Vector3 offset;
     private bool activated;
     private bool onGround;
+    public bool postive = false;
 
     Rigidbody rb;
     bool canMove = true;
@@ -18,6 +19,7 @@ public class TriangleFollowing : MonoBehaviour
     public float maxSpeed;
     public float gravityStrength;
     public float jumpStrength;
+    public float rayLen = 0.5f;
 
     public void Activate(){
         activated = true;
@@ -51,18 +53,26 @@ public class TriangleFollowing : MonoBehaviour
         offset = transform.position - objectToFollow.transform.position;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-        GetComponent<MeshRenderer>().enabled = false;
+        Deactivate();
     }
 
     void Update() {
-        groundDetectionRay = new Ray(GetComponent<MeshRenderer>().bounds.center, -Vector3.right);
+        int coeff;
+        if (postive) {
+            coeff = 1;
+        } else {
+            coeff = -1;
+        }
+
+        groundDetectionRay = new Ray(GetComponent<MeshRenderer>().bounds.center, coeff * Vector3.right);
         RaycastHit hit;
-        if (Physics.Raycast(groundDetectionRay, out hit, 0.5f, LayerMask.GetMask("ShadowGenerated")) && activated) {
+        if (Physics.Raycast(groundDetectionRay, out hit, rayLen, LayerMask.GetMask("ShadowGenerated")) && activated) {
             onGround = true;
+            Debug.Log("onGound");
         } else {
             onGround = false;
         }
-        Debug.DrawRay(groundDetectionRay.origin, groundDetectionRay.direction * 0.5f, Color.red);
+        Debug.DrawRay(groundDetectionRay.origin, groundDetectionRay.direction * rayLen, Color.red);
         if (Input.GetKeyDown(KeyCode.Space) && onGround) {
             spacePressed = true;
         }
@@ -71,25 +81,34 @@ public class TriangleFollowing : MonoBehaviour
 
     // Update is called once per frame
     void FixedUpdate()
-    {
+    {   
+        int coeff;
+        if (postive) {
+            coeff = 1;
+        } else {
+            coeff = -1;
+        }
+        
+
         if(!activated) {
             transform.position = objectToFollow.transform.position + offset;
         } else {
             if (Input.GetKey(KeyCode.A) && canMove) {
-                    rb.AddForce(Vector3.forward * forceCof);
+                    rb.AddForce(coeff * -1 * Vector3.forward * forceCof);
                 }
                 if (Input.GetKey(KeyCode.D)) {
-                    rb.AddForce(-Vector3.forward * forceCof);
+                    rb.AddForce(coeff * Vector3.forward * forceCof);
                 }
                 if (spacePressed) {
-                    rb.velocity= new Vector3(jumpStrength, 0, 0);
+                    rb.velocity= new Vector3(coeff * -1 * jumpStrength, 0, 0);
                     spacePressed = false;
                     Debug.Log("jump");
                 }
                 if (Input.GetKeyDown(KeyCode.P)) {
-                    transform.position = transform.position + new Vector3(0.1f, 0f, 0f);
+                    transform.position = transform.position + new Vector3(coeff * -1 * 0.1f, 0f, 0f);
                 }
-                rb.AddForce(-Vector3.right * gravityStrength);
+
+                rb.AddForce(coeff * Vector3.right * gravityStrength);
 
                 var currVelo = GetComponent<Rigidbody>().velocity;
                 rb.velocity = new Vector3(currVelo[0], currVelo[1], Mathf.Clamp(currVelo[2], -maxSpeed, maxSpeed));
