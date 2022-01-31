@@ -220,7 +220,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textComponent: {fileID: 5866284379081281468}
-  lines: []
+  lines:
+  - Use wasd to move
+  - Use space to jump
+  - Wait.. it doesn;t work
+  - Try pressing b see if it works then
   textSpeed: 0
 --- !u!1 &5866284379081281466
 GameObject:

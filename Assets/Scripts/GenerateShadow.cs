@@ -96,7 +96,7 @@ public class GenerateShadow : MonoBehaviour
     
 
     public void GenShadow(bool haveBase, bool onAir) {
-        
+        Debug.Log(name);
         if (!onAir) {
             SeperatePoints();
         } else {

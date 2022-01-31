@@ -23,7 +23,7 @@ public class WinGoal : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("win");
-        if (!win ) {
+        if (!win && other.gameObject.tag == "Player" && other.gameObject.GetComponent<PlayerMoving>().isActive() ) {
             
             SceneManager.LoadScene(_sceneName);
 

@@ -40,6 +40,7 @@ public class MenuController : MonoBehaviour
     public Sprite _Level6Background;
 
     [Header("Levels to Load")]
+    public string _Level0Scene;
     public string _Level1Scene;
     public string _Level2Scene;
     public string _Level3Scene;
@@ -49,15 +50,15 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        //PlayerPrefs.SetInt("LevelProgress", 0);
+        PlayerPrefs.SetInt("LevelProgress", -1);
         if (PlayerPrefs.HasKey("LevelProgress"))
         {
             pnum = PlayerPrefs.GetInt("LevelProgress");
         }
         else 
         {
-            PlayerPrefs.SetInt("LevelProgress", 0);
-            pnum = 0;
+            PlayerPrefs.SetInt("LevelProgress", -1);
+            pnum = -1;
         }
         SetBackground();
         SetMessage();
@@ -66,7 +67,7 @@ public class MenuController : MonoBehaviour
 
     public void SetMessage()
     {
-        if (pnum == 0) {
+        if ((pnum == -1) || (pnum >= maxLevel)) {
             playMessage.text = "Do you want to Start a New Game in Story Mode?";
         } else {
             playMessage.text = string.Format("Do you want to Continue Story Mode? (Stage {0})", pnum + 1);
@@ -78,7 +79,7 @@ public class MenuController : MonoBehaviour
         GameObject background = GameObject.Find("MenuBackground");
         Image bkgimage = background.GetComponent<Image>();
 
-        if (pnum == 0) 
+        if (pnum <= 0) 
         {
             bkgimage.sprite = _Level0Background;
         }
@@ -118,17 +119,18 @@ public class MenuController : MonoBehaviour
         {
             LoadLevel(pnum+1);
         }
-        else if (pnum == maxLevel)
+        else
         {
-            PlayerPrefs.SetInt("LevelProgress", 0);
-            NewGameDialogYes();
-        } else {
-            throw new System.Exception("Wrong Max Level Register");
+            SetMessage();
+            LoadLevel(1);
         }
     }
 
     public string ChooseLevel(int lnum) 
     {
+        if (lnum == 0) {
+            return _Level0Scene;
+        }
         if (lnum == 1) {
             return _Level1Scene;
         }
@@ -155,9 +157,15 @@ public class MenuController : MonoBehaviour
         SceneManager.LoadScene(ChooseLevel(lnum));
     }
 
+    public void LoadLevel0()
+    {
+        LoadLevel(0);
+    }
+
     public void LoadLevel1()
     {
         LoadLevel(1);
+        PlayerPrefs.SetInt("LevelProgress", 0);
     }
 
     public void LoadLevel2()

@@ -16,6 +16,10 @@ public class PlayerMoving : MonoBehaviour
     bool isShadow = false;
     
 
+    public bool isActive() {
+        return !isShadow;
+    }
+
     public void LockMovement() {
         canMove = false;
         child.GetComponent<TriangleFollowing>().LockMovement();
