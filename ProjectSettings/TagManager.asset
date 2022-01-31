@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Light
+  - Controller
+  - Push
+  - Shadow
   layers:
   - Default
   - TransparentFX
@@ -11,13 +15,13 @@ TagManager:
   - 
   - Water
   - UI
+  - Land
+  - NormalObject
+  - ShadowObject
+  - ShadowGenerated
+  - AirNormalObject
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - GlassObject
   - 
   - 
   - 
