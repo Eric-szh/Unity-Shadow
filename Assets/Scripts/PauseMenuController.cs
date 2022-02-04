@@ -17,6 +17,11 @@ public class PauseMenuController : MonoBehaviour
     [SerializeField] private bool isPaused;
     public string _MainMenu;
 
+    void Start()
+    {
+        SetGlobalVolume();
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -67,6 +72,13 @@ public class PauseMenuController : MonoBehaviour
     {
         AudioListener.volume = volume;
         volumeTextValue.text = volume.ToString("0.0");
+    }
+
+    public void SetGlobalVolume()
+    {
+        float startv = PlayerPrefs.GetFloat("masterVolume");
+        volumeSlider.value = startv;
+        SetVolume(startv);
     }
 
     public void VolumeApply()

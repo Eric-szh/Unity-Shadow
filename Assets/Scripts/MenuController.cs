@@ -60,6 +60,7 @@ public class MenuController : MonoBehaviour
             PlayerPrefs.SetInt("LevelProgress", -1);
             pnum = -1;
         }
+        SetGlobalVolume();
         SetBackground();
         SetMessage();
         SetLevelPreview();
@@ -211,6 +212,13 @@ public class MenuController : MonoBehaviour
     public void ExitButton()
     {
         Application.Quit();
+    }
+
+    public void SetGlobalVolume()
+    {
+        float startv = PlayerPrefs.GetFloat("masterVolume");
+        volumeSlider.value = startv;
+        SetVolume(startv);
     }
 
     public void SetVolume(float volume)
